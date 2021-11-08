@@ -127,6 +127,8 @@ while True:
 		for line in lines:
 			print(line)
 			line = line.split(",")
+			line2 = line
+			error = 0
 			print(line)
 			# print(a1)
 			#print(len(line))
@@ -138,6 +140,7 @@ while True:
 				print("\033[0;31m")
 				print("Failed : PLEASE CHECK THE ID ")
 				a1 = 0
+				# error = 1
 			if type(line[1])==str:
 				print("\033[0;32m")
 				print("Passed : OK")
@@ -146,18 +149,7 @@ while True:
 				print("\033[0;31m")
 				print("Failed : PLEASE CHECK THE NAME ")
 				a2 = 1
-			"""
-			for i in line[2]:
-				if (ord(i)>47) and (ord(i)<58):
-					ok = 0
-				else:
-					ok = 1
-			if ok == 0:
-				print("\033[0;32m")
-				print("Passed : OK")
-				a3 = -1
-			"""
-			if (line[2]).isnumeric():
+			if (line[2]).isnumeric() :
 				print("\033[0;32m")
 				print("Passed : OK")
 				a3 = -1
@@ -214,44 +206,62 @@ while True:
 				pass
 			else:
 				id = input("Enter the ID again : ")
-				line[a1] = id
+				line2[a1] = id
+				error = 1
+				
 			if a2 == -1:
 				pass
 			else:
 				name = input("Enter the name again : ")
-				line[a2] = name
+				line2[a2] = name
+				error = 1
 			if a3 == -1:
 				pass
 			else:
+				print(type(line[a3]))
 				age = input("Enter the age again : ")
-				line[a3] = age
-				print(line[a3])
+				line2[a3] = age
+				# print(type(line[a3]))
+				error = 1
 				# break
 			if a4 == -1:
 				pass
 			else:
 				gender = input("Enter the gender again : ")
-				line[a4] = gender
+				line2[a4] = gender
+				error = 1
 			if a5 == -1:
 				pass
 			else:
 				date = input("Enter the joining date again : ")
-				line[a5] = date
+				line2[a5] = date
+				error = 1
 			if a6 == -1:
 				pass
 			else:
 				designation = input("Enter the designation again : ")
-				line[a6] = designation
+				line2[a6] = designation
+				error = 1
 			if a7 == -1:
 				pass
 			else:
 				phone = input("Enter the phone no. again : ")
-				line[a7] = phone
+				line2[a7] = phone
+				error = 1
 			if a8 == -1:
 				pass
 			else:
 				salary = input("Enter the salary again : ")
-				line[a8] = salary
+				line2[a8] = salary
+				error = 1
+			print("Vipul")
+			print(line)
+			# fp3.close()
+			if error == 1:
+				fp4 = open("staff.csv","a+")
+				line2 = ",".join(line2)
+				fp4.write(line2)
+				fp4.close()
 			#print(line[7])
 			print("\033[0;37m")
 			# a1 += 1
