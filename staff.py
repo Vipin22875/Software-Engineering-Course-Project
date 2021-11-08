@@ -10,7 +10,20 @@ details = ['ID','Name', 'Age', 'Gender','Date of Joining', 'Designation', 'Phone
 detailsType = ['num','str','num','str','date','str','num','num']
 validLength = { "Phone":10,"Salary":[999,9999999]}
 
+# error = []
 error = {}
+
+def info(fp):
+	for i in details:
+		data = input("Enter "+ i + " :")
+
+		# if (i == "Contact no" or i == "ID" or i == "DIV"):
+		# 	while (len(data) != validLength[i] and len(data) != 0):
+		# 		data = input("Enter valid "+ i + " :")
+		fp.write(data + ",")
+	fp.write("\n")
+	return
+
 def open_file(filename,mode):
     if exists(filename):
         fp = open(filename,mode)
@@ -50,23 +63,23 @@ def show_error(filename):
 			if l == 'Phone':
 				if len(dataStaff[i]) != validLength[l]:
 					entry = ("At entry "+str(count+1))
-					error.update({entry:'Valid Length Error ' + details[i] + " "})
+					error.update({entry:'Valid Length Error ' + details[i] + " " + str(i)})
 
 			if l == 'Salary':
 				if check_salary(dataStaff[i]):
 					entry = ("At entry "+str(count+1))
-					error.update({entry:'Valid Salary Error ' + details[i] + " "})
+					error.update({entry:'Valid Salary Error ' + details[i] + " " + str(i)})
 
 			if l == 'Gender':
 				if dataStaff[i] == "M" or dataStaff[i] == "F":
 					entry = ("At entry " + str(count+1))
-					error.update({entry:"Vaccine Information Error"})
+					error.update({entry:"Vaccine Information Error " + str(i) })
 					
 		count +=1
 	for i in error:
 		print(i," : ",error[i])
 
-	return
+	return error
 
 def check(filename):
 	fp = open_file(filename,'r')
@@ -129,15 +142,41 @@ def check(filename):
 			print("\033[0;31m")
 			print(colorama.Back.WHITE + "Not clear"+Style.RESET_ALL)
 
+def update_error(error,filename):
+	fp = open_file(filename,'r')
+	lines = fp.readlines()
+	fp.close()
+	error_lines = error.keys()
+	error_value = [i for error[i] in error_lines]
+	error_lines = [int(i[-1]) for i in error_lines]
+	error_value = [int(i[-1]) for i in error_value]
+	print(error_lines)
+	fp = open_file(filename,'w')
+	for j in error_lines:
+		print(j)
+		for i in range(len(lines)):
+			if j-1 == i:
+				info(fp)
+				i = i + 1
+			else:
+				fp.write(lines[i])
+	fp.close()
+	pass
 
 if __name__== "__main__":
-    filename = 'staff.txt'
-    while True:
-        print(Style.RESET_ALL)
-        choice = int(input("Enter: "))
-        if choice == 1:
-            show_error(filename)
-        elif choice == 2:
-            check(filename)
-        else:
-            break
+	filename = 'staff.txt'
+	while True:
+		print(Style.RESET_ALL)
+		print(" 1. Overview of all errors")
+		print(" 2. Check for error line by line")
+		choice = int(input("Enter: "))
+		if choice == 1:
+			error_dict = show_error(filename)
+		elif choice == 2:
+			check(filename)
+		elif choice == 3:
+				print(error_dict)
+				update_error(error_dict,filename)
+		else:
+			print("Exit")
+			break

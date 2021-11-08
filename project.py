@@ -86,14 +86,34 @@ def check(filename):
 
         
     pass
+
+def update_error(error,filename):
+	fp = open_file(filename,'r')
+	lines = fp.readlines()
+	fp.close()
+	lines = error.keys()
+	fp = open_file(filename,'w')
+	for i,line in enumerate(lines):
+		fp.write(line)
+	pass
+
 if __name__== "__main__":
     filename = 'patient.txt'
     while True:
         print(Style.RESET_ALL)
+        print(" 1. Overview of all errors")
+        print(" 2. Check for error line by line")
         choice = int(input("Enter: "))
         if choice == 1:
-            show_error(filename)
+            error_dict = show_error(filename)
         elif choice == 2:
             check(filename)
+        elif choice == 3:
+            try:
+                print(error_dict)
+                update_error(error_dict,filename)
+            except:
+                print("First Find errors")
         else:
+            print("Exit")
             break
