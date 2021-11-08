@@ -16,10 +16,6 @@ details = ['Name', 'Age', 'Gender','Phone', 'Bloodgroup', 'Sugar','BloodPressure
 def info(fp):
 	for i in details:
 		data = input("Enter "+ i + " :")
-
-		# if (i == "Contact no" or i == "ID" or i == "DIV"):
-		# 	while (len(data) != validLength[i] and len(data) != 0):
-		# 		data = input("Enter valid "+ i + " :")
 		fp.write(data + ",")
 	fp.write("\n")
 	return

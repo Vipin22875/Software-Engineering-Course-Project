@@ -3,11 +3,11 @@ import os
 from colorama import *
 import colorama
 
-details = ['Name', 'Age', 'Gender','Phone', 'Bloodgroup', 'Sugar','BloodPressure','Vaccine','VaccineName']
+details = ['Name', 'Age', 'Gender','Phone', 'Bloodgroup', 'Diabetic','BloodPressure','Vaccine','VaccineName']
 detailsType = ['str','num','str','num','str','str','num','num','str']
-validLength = { "Phone":10,"Vaccine":1}
+validLength = { "Phone":10,"Vaccine":1,"BloodPressure":[50,170]}
 
-error = {}
+# error = []
 def open_file(filename,mode):
     if exists(filename):
         fp = open(filename,mode)
@@ -17,8 +17,14 @@ def open_file(filename,mode):
         error.update({'NoFile':"NotFound"})
         return None
 
-def show_error(filename):
+def check_bp(bp):
+	if int(bp) > validLength['BloodPressure'][0] and int(bp) < validLength['BloodPressure'][1]:
+		return True
+	else:
+		return False
 
+def show_error(filename):
+    error = []
     fp = open_file(filename,'r')
 
     lines = fp.readlines()
@@ -27,93 +33,108 @@ def show_error(filename):
     count = 0
     for line in lines:
         #print(line)
+        error_value = []
         dataStudent = line.split(',')
         for i,l in enumerate(details):
-            if l == 'Phone' or l == 'Vaccine':
-                if len(dataStudent[i]) != validLength[l]:
-                    entry = ("At entry "+str(count+1))
-                    error.update({entry:'Valid Length Error ' + details[i] + " "})
-            
-            if l == 'Vaccine' and dataStudent[i] == '0':
-                if dataStudent[i+1] != "NA":
-                    entry = ("At entry " + str(count+1))
-                    error.update({entry:"Vaccine Information Error"})
-        count +=1
-
-    for i in error:
-        print(i," : ",error[i])
-
-def check(filename):
-    fp = open_file(filename,'r')
-    lines = fp.readlines()
-    # print(len(details))
-    # print(len(detailsType))
-    for line in lines:
-        line = line.split(',')
-        # print(len(line))
-        print("******************")
-        print("Checking validty of entries of Patient : ",line[0])
-        for i,entry in enumerate(line):
-            if detailsType[i] == 'str':
-                entry = entry.strip('\n')
-                if entry.isalpha():
-                    ok = 1
-                else:
-                    ok = 0
             if detailsType[i] == 'num':
-                if entry.isnumeric():
-                    ok = 1
+                dataStudent[i] = dataStudent[i].strip('\n')
+                if dataStudent[i].isnumeric():
+                    if l == 'Phone' or l == 'Vaccine':
+                        if len(dataStudent[i]) != validLength[l]:
+                            error_value.append(i)
+                    if l == 'Vaccine' and dataStudent[i] == '0':
+                        if dataStudent[i+1] != "NA":
+                            error_value.append(i)
+                    if l == "BloodPressure":
+                        if check_bp(dataStudent[i]):
+                            pass
+                        else:
+                            error_value.append(i)
                 else:
-                    ok = 0
-
-            if details[i] == 'Vaccine' and line[i] == '0':
-                if line[i+1] == "NA":
-                    ok = 1
+                    error_value.append(i)
+            if detailsType[i] == 'str':
+                if dataStudent[i].isalpha():
+                    
+                    if l == 'Gender':
+                        if dataStudent[i] == 'M' or dataStudent == 'F':
+                            pass
+                        else:
+                            error_value.append(i)
+                    if l == 'Diabetic':
+                        if dataStudent[i] == 'Y' or dataStudent == 'N':
+                            pass
+                        else:
+                            error_value.append(i)
                 else:
-                    ok = 0
-            if ok == 1:
-                print("\033[0;32m")
-                print("Passed : OK")
-            else:
-                print("\033[0;31m")
-                print("Failed : PLEASE CHECK THE " +details[i].upper())
-        if ok:
-            print("\033[0;32m")
-            print(colorama.Back.WHITE + "All clear"+Style.RESET_ALL)
-        else:
-            print("\033[0;31m")
-            print(colorama.Back.WHITE + "Not clear"+Style.RESET_ALL)
+                    error_value.append(i)
+                      
+        error.append(error_value)
+    for i in range(len(error)):
+        print("Entry ",i+1,"has ",len(error[i])," errors.")
+    return error
 
-        
-    pass
+def check(error,filename):
+	for i in range(len(error)):
+		print("For ",i+1, " Entry")
+		ok = 1
+		for j in range(len(details)):
+			if j in error[i]:
+				print("\033[0;31m")
+				print("Failed : PLEASE CHECK THE " +details[i].upper())
+				ok = 0
+			else:
+				print("\033[0;32m")
+				print("Passed : OK")
+		if ok:
+			print("\033[0;32m")
+			print(colorama.Back.WHITE + "All clear"+Style.RESET_ALL)
+		else:
+			print("\033[0;31m")
+			print(colorama.Back.WHITE + "Not clear"+Style.RESET_ALL)
+		print("*******************")
+
 
 def update_error(error,filename):
 	fp = open_file(filename,'r')
 	lines = fp.readlines()
 	fp.close()
-	lines = error.keys()
 	fp = open_file(filename,'w')
 	for i,line in enumerate(lines):
-		fp.write(line)
-	pass
+		if len(error[i]) == 0:
+			fp.write(line)
+		else:
+			print("For entry ",i+1)
+			lineList = line.split(',')
+			for k in error[i]:
+				strg = "Enter valid " + details[k] + ":"
+				value = input(strg)
+				lineList[k] = value
+			changedLine = ','.join(lineList)
+			changedLine = changedLine
+			fp.write(changedLine)
+	fp.close()
 
 if __name__== "__main__":
-    filename = 'patient.txt'
-    while True:
-        print(Style.RESET_ALL)
-        print(" 1. Overview of all errors")
-        print(" 2. Check for error line by line")
-        choice = int(input("Enter: "))
-        if choice == 1:
-            error_dict = show_error(filename)
-        elif choice == 2:
-            check(filename)
-        elif choice == 3:
-            try:
-                print(error_dict)
-                update_error(error_dict,filename)
-            except:
-                print("First Find errors")
-        else:
-            print("Exit")
-            break
+	filename = 'patient.txt'
+	while True:
+		print(Style.RESET_ALL)
+		print("MENU")
+		print(" 1. Overview of all errors")
+		print(" 2. Check for error line by line")
+		choice = int(input("Enter: "))
+		if choice == 1:
+			error_list = show_error(filename)
+		elif choice == 2:
+			try:
+				check(error_list,filename)
+			except:
+				print("Generate all error first")
+		elif choice == 3:
+			try:
+				update_error(error_list,filename)
+			except:
+				print("Generate all error first")
+				
+		else:
+			print("Exit")
+			break
