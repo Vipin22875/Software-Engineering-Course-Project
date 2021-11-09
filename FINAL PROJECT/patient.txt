@@ -1,0 +1,2 @@
+vipin,22,F,1234567890,A,N,80,0,NA,
+Vinay,22,M,9483728392,O,Y,99,1,covidsheild,
