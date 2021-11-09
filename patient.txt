@@ -1,2 +1,2 @@
-Vivek,24,M,9632587410,B,Y,130,1,Vaccine,
-Vaibhav,M,4,8520147963,O,N,135,0,Na,
+vipin,22,F,1234567890,A,N,80,0,NA,
+Vinay,22,M,9483728392,O,Y,99,1,covidsheild,

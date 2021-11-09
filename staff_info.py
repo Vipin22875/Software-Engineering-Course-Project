@@ -12,7 +12,6 @@ import os
 """
 
 details = ['ID','Name', 'Age', 'Gender','Date of Joining', 'Designation', 'Phone','Salary']
-# validLength = { "Contact no":10,"ID":9,"DIV":1}
 
 def open_file(filename,mode):
     if exists(filename):
@@ -27,9 +26,6 @@ def info(fp):
 	for i in details:
 		data = input("Enter "+ i + " :")
 
-		# if (i == "Contact no" or i == "ID" or i == "DIV"):
-		# 	while (len(data) != validLength[i] and len(data) != 0):
-		# 		data = input("Enter valid "+ i + " :")
 		fp.write(data + ",")
 	fp.write("\n")
 	return
@@ -49,7 +45,7 @@ def readFile (filename):
 	else:
 		print("\nNo entries are added until now\n")
 		
-def menu():
+def add_staff():
 	choice = 1
 	title = "\n\n\t------------------------------------------\n\t----------------- MENU -------------------  \n\t------------------------------------------\n"
 	print(title)
@@ -138,7 +134,6 @@ def menu():
 				for j,line in enumerate(lines):
 					data = line.split(',')
 					if name == data[0] or name.upper() == data[0] or name.lower() == data[0]:
-					# if (line.find(name) !=-1 or line.find(name.lower()) !=-1 or line.find(name.upper()) !=-1):
 						print("Staff Record Found")
 						dataStaff = line.split(',')
 						for i,l in enumerate(details):
@@ -169,5 +164,3 @@ def menu():
 				f.close()
 			else:
 				print("\nNo entries are added until now\n")
-if __name__ == "__main__":
-	menu()

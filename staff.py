@@ -5,21 +5,18 @@ import colorama
 import datetime
 from datetime import date
 from datetime import datetime
+import sys
+
 
 details = ['ID','Name', 'Age', 'Gender','Date of Joining', 'Designation', 'Phone','Salary']
 detailsType = ['num','str','num','str','date','str','num','num']
 validLength = { "Phone":10,"Salary":[999,9999999]}
 
 
-# error = {}
 
 def info(fp):
 	for i in details:
 		data = input("Enter "+ i + " :")
-
-		# if (i == "Contact no" or i == "ID" or i == "DIV"):
-		# 	while (len(data) != validLength[i] and len(data) != 0):
-		# 		data = input("Enter valid "+ i + " :")
 		fp.write(data + ",")
 	fp.write("\n")
 	return
@@ -120,7 +117,7 @@ def check(error,filename):
 		for j in range(len(details)):
 			if j in error[i]:
 				print("\033[0;31m")
-				print("Failed : PLEASE CHECK THE " +details[i].upper())
+				print("Failed : PLEASE CHECK THE " +details[j].upper())
 				ok = 0
 			else:
 				print("\033[0;32m")
@@ -133,67 +130,6 @@ def check(error,filename):
 			print(colorama.Back.WHITE + "Not clear"+Style.RESET_ALL)
 		print("*******************")
 
-
-# def check(filename):
-# 	fp = open_file(filename,'r')
-# 	lines = fp.readlines()
-# 	# print(len(details))
-# 	# print(len(detailsType))
-# 	for line in lines:
-# 		line = line.split(',')
-
-# 		# print(details)
-# 		# print(line)
-# 		# print(len(line))
-# 		print("******************")
-# 		print("Checking validty of entries of Patient : ",line[0])
-# 		for i,entry in enumerate(line):
-# 			if detailsType[i] == 'str':
-# 				entry = entry.strip('\n')
-# 				if entry.isalpha():
-# 					ok = 1
-# 				else:
-# 					ok = 0
-# 			if detailsType[i] == 'num':
-# 				if entry.isnumeric():
-# 					ok = 1
-# 				else:
-# 					ok = 0
-
-# 			if details[i] == 'Gender':
-# 				if line[i] == "M" or line[i] == "F":
-# 					ok = 1
-# 				else:
-# 					ok = 0
-					
-# 			if details[i] == 'Date of Joining':
-# 				if validate(line[i]):
-# 					ok = 1
-# 				else :
-# 					ok = 0		
-# 			if details[i] == 'Destination':
-# 				if line[i] == "D" or line[i] == "N":
-# 					ok = 1
-# 				else:
-# 					ok = 0
-# 			if details[i] == 'Salary':
-# 				if check_salary(line[i]):
-# 					ok = 1
-# 				else:
-# 					ok = 0
-					
-# 			if ok == 1:
-# 				print("\033[0;32m")
-# 				print("Passed : OK")
-# 			else:
-# 				print("\033[0;31m")
-# 				print("Failed : PLEASE CHECK THE " +details[i].upper())
-# 		if ok:
-# 			print("\033[0;32m")
-# 			print(colorama.Back.WHITE + "All clear"+Style.RESET_ALL)
-# 		else:
-# 			print("\033[0;31m")
-# 			print(colorama.Back.WHITE + "Not clear"+Style.RESET_ALL)
 
 def update_error(error,filename):
 	fp = open_file(filename,'r')
@@ -211,19 +147,20 @@ def update_error(error,filename):
 				value = input(strg)
 				lineList[k] = value
 			changedLine = ','.join(lineList)
-			# changedLine = changedLine + "\n"
 			changedLine = changedLine
 			fp.write(changedLine)
 	fp.close()
 
-if __name__== "__main__":
+def check_staff():
 	filename = 'staff.txt'
 	while True:
 		print(Style.RESET_ALL)
-		print("MENU")
+		title = "\n\n\t------------------------------------------\n\t----------------- MENU -------------------  \n\t------------------------------------------\n"
+		print(title)
 		print(" 1. Overview of all errors")
 		print(" 2. Check for error line by line")
 		print(" 3. Correct errors")
+		print(" 4. Exit")
 		choice = int(input("Enter: "))
 		if choice == 1:
 			error_list = show_error(filename)
@@ -237,7 +174,9 @@ if __name__== "__main__":
 				update_error(error_list,filename)
 			except:
 				print("Generate all error first")
-				
+		elif choice == 4:
+			sys.exit(1)		
+
 		else:
 			print("Exit")
 			break

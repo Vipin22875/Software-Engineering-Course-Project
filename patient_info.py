@@ -7,13 +7,12 @@ from project import open_file
 2. View Patient details 
 3. Search for Patient 
 4. Remove a Patient's entry 
-5. Delete previos Patient data 
+5. Delete previous Patient data 
 6. Exit
 
 """
 
 details = ['Name', 'Age', 'Gender','Phone', 'Bloodgroup', 'Diabtic','BloodPressure','Vaccine','VaccineName']
-# validLength = { "Contact no":10,"ID":9,"DIV":1}
 
 def info(fp):
 	for i in details:
@@ -37,13 +36,13 @@ def readFile (filename):
 	else:
 		print("\nNo entries are added until now\n")
 		
-def menu():
+def add_patient():
 	choice = 1
 	title = "\n\n\t------------------------------------------\n\t----------------- MENU -------------------  \n\t------------------------------------------\n"
 	print(title)
 	while (choice != 6):
 		
-		menu = "\n\n------------------------------------------\n1. Enter details of Patient \n2. View Patient details \n3. Search for Patient \n4. Remove a Patient's entry \n5. Update patinet data \n6. Delete previos Patient data \n7. Exit\n \nEnter choice here :"
+		menu = "\n\n------------------------------------------\n1. Enter details of Patient \n2. View Patient details \n3. Search for Patient \n4. Remove a Patient entry \n5. Update Patient data \n6. Delete previos Patient data \n7. Exit\n \nEnter choice here :"
 		choice = int(input(menu))
 		print("------------------------------------------")
 		filename = "patient.txt"
@@ -127,7 +126,7 @@ def menu():
 				for j,line in enumerate(lines):
 					data = line.split(',')
 					if name == data[0] or name.upper() == data[0] or name.lower() == data[0]:
-					# if (line.find(name) !=-1 or line.find(name.lower()) !=-1 or line.find(name.upper()) !=-1):
+					
 						print("Patient Record Found")
 						dataPatient = line.split(',')
 						for i,l in enumerate(details):
@@ -135,7 +134,7 @@ def menu():
 						found = 1
 						f.close()
 						break
-						# print("Do you want to change it ? (Y/N)")
+						
 				if found == 1:
 					choice = input("Do you want to change it ? (Y/N)")
 					if choice.upper() == 'Y':
@@ -158,5 +157,3 @@ def menu():
 				f.close()
 			else:
 				print("\nNo entries are added until now\n")
-if __name__ == "__main__":
-	menu()

@@ -2,12 +2,12 @@ from os.path import exists
 import os
 from colorama import *
 import colorama
+import sys
 
 details = ['Name', 'Age', 'Gender','Phone', 'Bloodgroup', 'Diabetic','BloodPressure','Vaccine','VaccineName']
 detailsType = ['str','num','str','num','str','str','num','num','str']
 validLength = { "Phone":10,"Vaccine":1,"BloodPressure":[50,170]}
 
-# error = []
 def open_file(filename,mode):
     if exists(filename):
         fp = open(filename,mode)
@@ -27,11 +27,8 @@ def show_error(filename):
 	fp = open_file(filename,'r')
 
 	lines = fp.readlines()
-	# print(lines)
-	#print(lines)
 	count = 0
 	for line in lines:
-		#print(line)
 		error_value = []
 		dataStudent = line.split(',')
 		for i,l in enumerate(details):
@@ -56,12 +53,12 @@ def show_error(filename):
 				if dataStudent[i].isalpha():
 					
 					if l == 'Gender':
-						if dataStudent[i] == 'M' or dataStudent == 'F':
+						if dataStudent[i] == 'M' or dataStudent[i] == 'F':
 							pass
 						else:
 							error_value.append(i)
 					if l == 'Diabetic':
-						if dataStudent[i] == 'Y' or dataStudent == 'N':
+						if dataStudent[i] == 'Y' or dataStudent[i] == 'N':
 							pass
 						else:
 							error_value.append(i)
@@ -125,14 +122,16 @@ def update_error(error,filename):
 			fp.write(changedLine)
 	fp.close()
 
-if __name__== "__main__":
+def check_patient(): 
 	filename = 'patient.txt'
 	while True:
 		print(Style.RESET_ALL)
-		print("MENU")
+		title = "\n\n\t------------------------------------------\n\t----------------- MENU -------------------  \n\t------------------------------------------\n"
+		print(title)
 		print(" 1. Overview of all errors")
 		print(" 2. Check for error line by line")
 		print(" 3. Correct errors")
+		print(" 4. Exit")
 		choice = int(input("Enter choice : "))
 		if choice == 1:
 			error_list = show_error(filename)
@@ -146,6 +145,8 @@ if __name__== "__main__":
 				update_error(error_list,filename)
 			except:
 				print("Generate all error first")
+		elif choice == 4:
+			sys.exit(1)
 				
 		else:
 			print("Exit")
