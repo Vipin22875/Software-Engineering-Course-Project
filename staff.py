@@ -101,7 +101,16 @@ def show_error(filename):
 					error_value.append(i)
 		error.append(error_value)
 	for i in range(len(error)):
-		print("Entry ",i+1,"has ",len(error[i])," errors.")
+		if len(error[i]) == 0:
+			print("Entry ",i+1," : ",end = "")
+			print("\033[0;32m",end = "")
+			print(colorama.Back.WHITE + "All clear"+Style.RESET_ALL)
+			print('\n')
+		else:
+			print("Entry ",i+1," : ",end = "")
+			print("\033[0;31m",end = "")
+			print(colorama.Back.WHITE + "Not clear"+Style.RESET_ALL)
+			print("Has ",len(error[i])," errors\n")
 	return error
 
 def check(error,filename):
@@ -202,6 +211,7 @@ def update_error(error,filename):
 				value = input(strg)
 				lineList[k] = value
 			changedLine = ','.join(lineList)
+			# changedLine = changedLine + "\n"
 			changedLine = changedLine
 			fp.write(changedLine)
 	fp.close()
@@ -213,6 +223,7 @@ if __name__== "__main__":
 		print("MENU")
 		print(" 1. Overview of all errors")
 		print(" 2. Check for error line by line")
+		print(" 3. Correct errors")
 		choice = int(input("Enter: "))
 		if choice == 1:
 			error_list = show_error(filename)

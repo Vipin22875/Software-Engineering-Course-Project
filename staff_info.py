@@ -14,6 +14,15 @@ import os
 details = ['ID','Name', 'Age', 'Gender','Date of Joining', 'Designation', 'Phone','Salary']
 # validLength = { "Contact no":10,"ID":9,"DIV":1}
 
+def open_file(filename,mode):
+    if exists(filename):
+        fp = open(filename,mode)
+        return fp
+    else:  
+        print("File doesn't exist")
+        error.update({'NoFile':"NotFound"})
+        return None
+
 def info(fp):
 	for i in details:
 		data = input("Enter "+ i + " :")
@@ -46,7 +55,7 @@ def menu():
 	print(title)
 	while (choice != 6):
 		
-		menu = "\n\n------------------------------------------\n1. Enter details of Staff \n2. View Staff details \n3. Search for Staff \n4. Remove a Staff's entry \n5. Delete previos Staff data \n6. Exit\n \nEnter choice here :"
+		menu = "\n\n------------------------------------------\n1. Enter details of Staff \n2. View Staff details \n3. Search for Staff \n4. Remove a Staff's entry \n5. Update Staff data \n6. Delete previos Staff data \n7. Exit\n \nEnter choice here :"
 		choice = int(input(menu))
 		print("------------------------------------------")
 		filename = "staff.txt"
@@ -76,7 +85,7 @@ def menu():
 			
 		if choice == 3:
 			found = 0
-			name = input("Enter Staff name Age:")
+			name = input("Enter Staff name:")
 			if exists(filename):
 				f = open(filename, "r")
 				lines = f.readlines()
@@ -94,7 +103,7 @@ def menu():
 				f.close()
 			else:
 				print("\nNo entries are added until now\n")
-		
+
 		if choice == 4:
 			if exists(filename):
 				f = open(filename, "r")
@@ -112,13 +121,53 @@ def menu():
 				print("\nStaff's entry removed successfully")
 			else:
 				print("\nNo entries are added until now\n")
-		
-		
-		if choice == 5:
+
+		if choice == 6:
 			os.remove(filename)
 			
-		if choice == 6:
+		if choice == 7:
 			print("\n\tThank you")
 			print("------------------------------------------")
+			break
+		if choice == 5:
+			found = 0
+			name = input("Enter Staff ID :")
+			if exists(filename):
+				f = open_file(filename, "r")
+				lines = f.readlines()
+				for j,line in enumerate(lines):
+					data = line.split(',')
+					if name == data[0] or name.upper() == data[0] or name.lower() == data[0]:
+					# if (line.find(name) !=-1 or line.find(name.lower()) !=-1 or line.find(name.upper()) !=-1):
+						print("Staff Record Found")
+						dataStaff = line.split(',')
+						for i,l in enumerate(details):
+							print(details[i]+" : ",dataStaff[i])
+						found = 1
+						f.close()
+						break
+						# print("Do you want to change it ? (Y/N)")
+				if found == 1:
+					choice = input("Do you want to change it ? (Y/N)")
+					if choice.upper() == 'Y':
+						f = open(filename, "r")
+						lines = f.readlines()
+						f.close()
+						fp = open_file(filename,'w')
+						for i in range(len(lines)):
+							if i == j:
+								info(fp)
+							else:
+								fp.write(lines[i])
+						fp.close()
+					else:
+						print("Thank you")
+						break
+				elif found == 0:
+					print("Record not found for the Staff")
+				print("------------------------------------------")
+				f.close()
+			else:
+				print("\nNo entries are added until now\n")
 if __name__ == "__main__":
 	menu()

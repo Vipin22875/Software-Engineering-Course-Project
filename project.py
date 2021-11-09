@@ -14,7 +14,6 @@ def open_file(filename,mode):
         return fp
     else:  
         print("File doesn't exist")
-        error.update({'NoFile':"NotFound"})
         return None
 
 def check_bp(bp):
@@ -24,54 +23,66 @@ def check_bp(bp):
 		return False
 
 def show_error(filename):
-    error = []
-    fp = open_file(filename,'r')
+	error = []
+	fp = open_file(filename,'r')
 
-    lines = fp.readlines()
-    # print(lines)
-    #print(lines)
-    count = 0
-    for line in lines:
-        #print(line)
-        error_value = []
-        dataStudent = line.split(',')
-        for i,l in enumerate(details):
-            if detailsType[i] == 'num':
-                dataStudent[i] = dataStudent[i].strip('\n')
-                if dataStudent[i].isnumeric():
-                    if l == 'Phone' or l == 'Vaccine':
-                        if len(dataStudent[i]) != validLength[l]:
-                            error_value.append(i)
-                    if l == 'Vaccine' and dataStudent[i] == '0':
-                        if dataStudent[i+1] != "NA":
-                            error_value.append(i)
-                    if l == "BloodPressure":
-                        if check_bp(dataStudent[i]):
-                            pass
-                        else:
-                            error_value.append(i)
-                else:
-                    error_value.append(i)
-            if detailsType[i] == 'str':
-                if dataStudent[i].isalpha():
-                    
-                    if l == 'Gender':
-                        if dataStudent[i] == 'M' or dataStudent == 'F':
-                            pass
-                        else:
-                            error_value.append(i)
-                    if l == 'Diabetic':
-                        if dataStudent[i] == 'Y' or dataStudent == 'N':
-                            pass
-                        else:
-                            error_value.append(i)
-                else:
-                    error_value.append(i)
-                      
-        error.append(error_value)
-    for i in range(len(error)):
-        print("Entry ",i+1,"has ",len(error[i])," errors.")
-    return error
+	lines = fp.readlines()
+	# print(lines)
+	#print(lines)
+	count = 0
+	for line in lines:
+		#print(line)
+		error_value = []
+		dataStudent = line.split(',')
+		for i,l in enumerate(details):
+			if detailsType[i] == 'num':
+				dataStudent[i] = dataStudent[i].strip('\n')
+				if dataStudent[i].isnumeric():
+					if l == 'Phone' or l == 'Vaccine':
+						if len(dataStudent[i]) != validLength[l]:
+							error_value.append(i)
+					if l == 'Vaccine' and dataStudent[i] == '0':
+						if dataStudent[i+1] != "NA":
+							error_value.append(i)
+					if l == "BloodPressure":
+						dataStudent[i] = dataStudent[i].strip('\n')
+						if check_bp(dataStudent[i]):
+							pass
+						else:
+							error_value.append(i)
+				else:
+					error_value.append(i)
+			if detailsType[i] == 'str':
+				if dataStudent[i].isalpha():
+					
+					if l == 'Gender':
+						if dataStudent[i] == 'M' or dataStudent == 'F':
+							pass
+						else:
+							error_value.append(i)
+					if l == 'Diabetic':
+						if dataStudent[i] == 'Y' or dataStudent == 'N':
+							pass
+						else:
+							error_value.append(i)
+				else:
+					error_value.append(i)
+						
+		error.append(error_value)
+	for i in range(len(error)):
+		if len(error[i]) == 0:
+			print("Entry ",i+1," : ",end = "")
+			print("\033[0;32m",end = "")
+			print(colorama.Back.WHITE + "All clear"+Style.RESET_ALL)
+			print('\n')
+		else:
+			print("Entry ",i+1," : ",end = "")
+			print("\033[0;31m",end = "")
+			print(colorama.Back.WHITE + "Not clear"+Style.RESET_ALL)
+			print("Has ",len(error[i])," errors\n")
+
+
+	return error
 
 def check(error,filename):
 	for i in range(len(error)):
@@ -80,7 +91,7 @@ def check(error,filename):
 		for j in range(len(details)):
 			if j in error[i]:
 				print("\033[0;31m")
-				print("Failed : PLEASE CHECK THE " +details[i].upper())
+				print("Failed : PLEASE CHECK THE " +details[j].upper())
 				ok = 0
 			else:
 				print("\033[0;32m")
@@ -121,7 +132,8 @@ if __name__== "__main__":
 		print("MENU")
 		print(" 1. Overview of all errors")
 		print(" 2. Check for error line by line")
-		choice = int(input("Enter: "))
+		print(" 3. Correct errors")
+		choice = int(input("Enter choice : "))
 		if choice == 1:
 			error_list = show_error(filename)
 		elif choice == 2:

@@ -1,5 +1,7 @@
 from os.path import exists
 import os
+
+from project import open_file
 """
 1. Enter details of Patient 
 2. View Patient details 
@@ -10,7 +12,7 @@ import os
 
 """
 
-details = ['Name', 'Age', 'Gender','Phone', 'Bloodgroup', 'Sugar','BloodPressure','Vaccine','VaccineName']
+details = ['Name', 'Age', 'Gender','Phone', 'Bloodgroup', 'Diabtic','BloodPressure','Vaccine','VaccineName']
 # validLength = { "Contact no":10,"ID":9,"DIV":1}
 
 def info(fp):
@@ -41,7 +43,7 @@ def menu():
 	print(title)
 	while (choice != 6):
 		
-		menu = "\n\n------------------------------------------\n1. Enter details of Patient \n2. View Patient details \n3. Search for Patient \n4. Remove a Patient's entry \n5. Delete previos Patient data \n6. Exit\n \nEnter choice here :"
+		menu = "\n\n------------------------------------------\n1. Enter details of Patient \n2. View Patient details \n3. Search for Patient \n4. Remove a Patient's entry \n5. Update patinet data \n6. Delete previos Patient data \n7. Exit\n \nEnter choice here :"
 		choice = int(input(menu))
 		print("------------------------------------------")
 		filename = "patient.txt"
@@ -71,7 +73,7 @@ def menu():
 			
 		if choice == 3:
 			found = 0
-			name = input("Enter Patient name Age:")
+			name = input("Enter Patient name :")
 			if exists(filename):
 				f = open(filename, "r")
 				lines = f.readlines()
@@ -109,11 +111,52 @@ def menu():
 				print("\nNo entries are added until now\n")
 		
 		
-		if choice == 5:
+		if choice == 6:
 			os.remove(filename)
 			
-		if choice == 6:
+		if choice == 7:
 			print("\n\tThank you")
 			print("------------------------------------------")
+			break
+		if choice == 5:
+			found = 0
+			name = input("Enter Patient name :")
+			if exists(filename):
+				f = open_file(filename, "r")
+				lines = f.readlines()
+				for j,line in enumerate(lines):
+					data = line.split(',')
+					if name == data[0] or name.upper() == data[0] or name.lower() == data[0]:
+					# if (line.find(name) !=-1 or line.find(name.lower()) !=-1 or line.find(name.upper()) !=-1):
+						print("Patient Record Found")
+						dataPatient = line.split(',')
+						for i,l in enumerate(details):
+							print(details[i]+" : ",dataPatient[i])
+						found = 1
+						f.close()
+						break
+						# print("Do you want to change it ? (Y/N)")
+				if found == 1:
+					choice = input("Do you want to change it ? (Y/N)")
+					if choice.upper() == 'Y':
+						f = open(filename, "r")
+						lines = f.readlines()
+						f.close()
+						fp = open_file(filename,'w')
+						for i in range(len(lines)):
+							if i == j:
+								info(fp)
+							else:
+								fp.write(lines[i])
+						fp.close()
+					else:
+						print("Thank you")
+						break
+				elif found == 0:
+					print("Record not found for the Patient")
+				print("------------------------------------------")
+				f.close()
+			else:
+				print("\nNo entries are added until now\n")
 if __name__ == "__main__":
 	menu()
