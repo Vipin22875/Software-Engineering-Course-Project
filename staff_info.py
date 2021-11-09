@@ -157,7 +157,7 @@ def add_staff():
 						fp.close()
 					else:
 						print("Thank you")
-						break
+						return
 				elif found == 0:
 					print("Record not found for the Staff")
 				print("------------------------------------------")

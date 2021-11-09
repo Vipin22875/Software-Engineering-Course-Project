@@ -40,7 +40,7 @@ def show_error(filename):
 							error_value.append(i)
 					if l == 'Vaccine' and dataStudent[i] == '0':
 						if dataStudent[i+1] != "NA":
-							error_value.append(i)
+							error_value.append(i+1)
 					if l == "BloodPressure":
 						dataStudent[i] = dataStudent[i].strip('\n')
 						if check_bp(dataStudent[i]):
@@ -150,4 +150,4 @@ def check_patient():
 				
 		else:
 			print("Exit")
-			break
+			return

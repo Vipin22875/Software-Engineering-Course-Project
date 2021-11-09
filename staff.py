@@ -179,4 +179,4 @@ def check_staff():
 
 		else:
 			print("Exit")
-			break
+			return

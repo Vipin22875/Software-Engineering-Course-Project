@@ -116,7 +116,7 @@ def add_patient():
 		if choice == 7:
 			print("\n\tThank you")
 			print("------------------------------------------")
-			break
+			return
 		if choice == 5:
 			found = 0
 			name = input("Enter Patient name :")
